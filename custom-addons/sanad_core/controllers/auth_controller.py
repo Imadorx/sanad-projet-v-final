@@ -58,16 +58,17 @@ class SanadAuthController(http.Controller):
     below, which use auth='user'.
     """
 
-    @http.route('/api/auth/login', type='jsonrpc', auth='none', methods=['POST'], csrf=False)
+    @http.route('/api/auth/login', type='http', auth='none', methods=['POST'], csrf=False)
     def login(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         login = params.get('login')
         password = params.get('password')
-        db = request.db or params.get('db')
+        db = request.db or params.get('db') or 'sanad_db'
         if not login or not password:
             return error_response('Login and password are required.', 400, 'missing_credentials')
         try:
-            uid = request.session.authenticate(db, login, password)
+            auth_info = request.session.authenticate(request.env, {'login': login, 'password': password, 'type': 'password'})
+            uid = auth_info.get('uid')
         except Exception:
             _logger.warning('SANAD login failure for %s', login)
             return error_response('Invalid credentials.', 401, 'invalid_credentials')
@@ -76,11 +77,11 @@ class SanadAuthController(http.Controller):
         user = request.env['res.users'].browse(uid)
         return json_response({'user': serialize_user(user)})
 
-    @http.route('/api/auth/logout', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/auth/logout', type='http', auth='user', methods=['POST'], csrf=False)
     def logout(self, **kwargs):
         request.session.logout(keep_db=True)
         return json_response({'success': True})
 
-    @http.route('/api/auth/session', type='jsonrpc', auth='user', methods=['GET', 'POST'], csrf=False)
+    @http.route('/api/auth/session', type='http', auth='user', methods=['GET', 'POST'], csrf=False)
     def session_info(self, **kwargs):
         return json_response({'user': serialize_user(request.env.user)})

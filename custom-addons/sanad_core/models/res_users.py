@@ -50,7 +50,7 @@ class ResUsers(models.Model):
         ])
 
         for user in self:
-            user.sanad_role_ids = user.groups_id & sanad_groups
+            user.sanad_role_ids = user.group_ids & sanad_groups
 
     def has_sanad_role(self, xml_id):
         """Check whether the current user belongs to a SANAD role group."""
@@ -61,4 +61,4 @@ class ResUsers(models.Model):
             raise_if_not_found=False,
         )
 
-        return bool(group) and group in self.groups_id
+        return bool(group) and group in self.group_ids

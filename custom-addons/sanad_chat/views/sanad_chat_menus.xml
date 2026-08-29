@@ -7,9 +7,7 @@
                   parent="sanad_core.menu_sanad_root"
                   action="action_sanad_chat_conversation"
                   sequence="50"
-                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor,
-                          sanad_core.group_sanad_patient,sanad_core.group_sanad_laboratory,
-                          sanad_core.group_sanad_pharmacy"/>
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor,sanad_core.group_sanad_patient,sanad_core.group_sanad_laboratory,sanad_core.group_sanad_pharmacy"/>
 
     </data>
 </odoo>
