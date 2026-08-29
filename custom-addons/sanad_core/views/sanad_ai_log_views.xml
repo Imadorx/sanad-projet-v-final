@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_ai_log_list" model="ir.ui.view">
+            <field name="name">sanad.ai.log.list</field>
+            <field name="model">sanad.ai.log</field>
+            <field name="arch" type="xml">
+                <list string="AI Interaction Log" create="false" edit="false" delete="false">
+                    <field name="timestamp"/>
+                    <field name="user_id"/>
+                    <field name="request_type"/>
+                    <field name="accessed_model"/>
+                    <field name="anonymization_applied"/>
+                    <field name="status" decoration-danger="status == 'blocked'" decoration-warning="status == 'failed'" decoration-success="status == 'success'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_ai_log_form" model="ir.ui.view">
+            <field name="name">sanad.ai.log.form</field>
+            <field name="model">sanad.ai.log</field>
+            <field name="arch" type="xml">
+                <form string="AI Interaction" create="false" edit="false" delete="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="request_type"/>
+                                <field name="timestamp"/>
+                                <field name="status"/>
+                            </group>
+                            <group>
+                                <field name="accessed_model"/>
+                                <field name="accessed_record_ids"/>
+                                <field name="anonymization_applied"/>
+                            </group>
+                        </group>
+                        <group string="Request">
+                            <field name="request_text" nolabel="1"/>
+                        </group>
+                        <group string="Response Metadata">
+                            <field name="response_metadata" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sanad_ai_log_search" model="ir.ui.view">
+            <field name="name">sanad.ai.log.search</field>
+            <field name="model">sanad.ai.log</field>
+            <field name="arch" type="xml">
+                <search string="Search AI Logs">
+                    <field name="user_id"/>
+                    <field name="request_type"/>
+                    <field name="accessed_model"/>
+                    <filter string="Blocked" name="blocked" domain="[('status','=','blocked')]"/>
+                    <filter string="Failed" name="failed" domain="[('status','=','failed')]"/>
+                    <filter string="Not Anonymized" name="not_anon" domain="[('anonymization_applied','=',False)]"/>
+                    <group>
+                        <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Request Type" name="group_type" context="{'group_by': 'request_type'}"/>
+                        <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sanad_ai_log" model="ir.actions.act_window">
+            <field name="name">AI Interaction Log</field>
+            <field name="res_model">sanad.ai.log</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sanad_ai_log_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No AI interactions logged yet.
+                </p>
+                <p>
+                    Entries appear here automatically once the sanad_ai module
+                    (Phase 8) is installed and users start interacting with the
+                    AI assistant. This log cannot be edited or deleted through
+                    the UI to preserve audit integrity.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

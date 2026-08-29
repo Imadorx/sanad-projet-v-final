@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Pharmacy-facing list: deliberately shows only what PRD 14.3
+             grants a pharmacy - medication, dosage, instructions and
+             status. No symptoms, observations, diagnosis-adjacent
+             clinical fields are exposed here (those live on
+             sanad.consultation, a different model the pharmacy group
+             has no access to at all). -->
+        <record id="view_sanad_pharmacy_prescription_list" model="ir.ui.view">
+            <field name="name">sanad.prescription.pharmacy.list</field>
+            <field name="model">sanad.prescription</field>
+            <field name="arch" type="xml">
+                <list string="Prescriptions to Process" decoration-success="pharmacy_status == 'completed'" decoration-info="pharmacy_status == 'pending'">
+                    <field name="date"/>
+                    <field name="patient_id"/>
+                    <field name="medication"/>
+                    <field name="dosage"/>
+                    <field name="frequency"/>
+                    <field name="duration"/>
+                    <field name="pharmacy_status" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_pharmacy_prescription_form" model="ir.ui.view">
+            <field name="name">sanad.prescription.pharmacy.form</field>
+            <field name="model">sanad.prescription</field>
+            <field name="arch" type="xml">
+                <form string="Prescription">
+                    <header>
+                        <button name="action_pharmacy_receive" string="Mark Received" type="object"
+                                class="oe_highlight" invisible="pharmacy_status != 'pending'"/>
+                        <button name="action_pharmacy_prepare" string="Mark Prepared" type="object"
+                                class="oe_highlight" invisible="pharmacy_status != 'received'"/>
+                        <button name="action_pharmacy_complete" string="Mark Completed" type="object"
+                                class="oe_highlight" invisible="pharmacy_status != 'prepared'"/>
+                        <field name="pharmacy_status" widget="statusbar"
+                               statusbar_visible="pending,received,prepared,completed"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="patient_id" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="medication" readonly="1"/>
+                                <field name="dosage" readonly="1"/>
+                                <field name="frequency" readonly="1"/>
+                                <field name="duration" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Instructions">
+                            <field name="instructions" nolabel="1" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sanad_pharmacy_prescription_search" model="ir.ui.view">
+            <field name="name">sanad.prescription.pharmacy.search</field>
+            <field name="model">sanad.prescription</field>
+            <field name="arch" type="xml">
+                <search string="Search Prescriptions">
+                    <field name="patient_id"/>
+                    <field name="medication"/>
+                    <filter string="Pending" name="pending" domain="[('pharmacy_status','=','pending')]"/>
+                    <filter string="Received" name="received" domain="[('pharmacy_status','=','received')]"/>
+                    <filter string="Prepared" name="prepared" domain="[('pharmacy_status','=','prepared')]"/>
+                    <group>
+                        <filter string="Status" name="group_status" context="{'group_by': 'pharmacy_status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sanad_pharmacy_prescription" model="ir.actions.act_window">
+            <field name="name">Prescriptions to Process</field>
+            <field name="res_model">sanad.prescription</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_sanad_pharmacy_prescription_list"/>
+            <field name="search_view_id" ref="view_sanad_pharmacy_prescription_search"/>
+            <field name="context">{'search_default_pending': 1}</field>
+        </record>
+
+    </data>
+</odoo>

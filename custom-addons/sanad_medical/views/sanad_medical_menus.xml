@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_sanad_medical_root"
+                  name="Medical"
+                  parent="sanad_core.menu_sanad_root"
+                  sequence="20"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor,sanad_core.group_sanad_patient"/>
+
+        <menuitem id="menu_sanad_medical_record"
+                  name="Medical Records"
+                  parent="menu_sanad_medical_root"
+                  action="action_sanad_medical_record"
+                  sequence="10"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor"/>
+
+        <menuitem id="menu_sanad_consultation"
+                  name="Consultations"
+                  parent="menu_sanad_medical_root"
+                  action="action_sanad_consultation"
+                  sequence="20"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor,sanad_core.group_sanad_patient"/>
+
+        <menuitem id="menu_sanad_prescription"
+                  name="Prescriptions"
+                  parent="menu_sanad_medical_root"
+                  action="action_sanad_prescription"
+                  sequence="30"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor,sanad_core.group_sanad_patient,sanad_core.group_sanad_pharmacy"/>
+
+    </data>
+</odoo>

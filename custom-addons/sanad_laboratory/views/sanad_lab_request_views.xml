@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_lab_request_list" model="ir.ui.view">
+            <field name="name">sanad.lab.request.list</field>
+            <field name="model">sanad.lab.request</field>
+            <field name="arch" type="xml">
+                <list string="Laboratory Requests" decoration-muted="status == 'cancelled'" decoration-success="status == 'completed'">
+                    <field name="date"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="laboratory_id"/>
+                    <field name="analysis_type"/>
+                    <field name="status" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_lab_request_form" model="ir.ui.view">
+            <field name="name">sanad.lab.request.form</field>
+            <field name="model">sanad.lab.request</field>
+            <field name="arch" type="xml">
+                <form string="Laboratory Request">
+                    <header>
+                        <button name="action_send" string="Send to Laboratory" type="object"
+                                class="oe_highlight" invisible="status != 'draft'"/>
+                        <button name="action_accept" string="Accept" type="object"
+                                class="oe_highlight" invisible="status != 'sent'"/>
+                        <button name="action_start_processing" string="Start Processing" type="object"
+                                class="oe_highlight" invisible="status != 'accepted'"/>
+                        <button name="action_complete" string="Mark Completed" type="object"
+                                class="oe_highlight" invisible="status != 'processing'"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                invisible="status in ('completed','cancelled')"/>
+                        <field name="status" widget="statusbar"
+                               statusbar_visible="draft,sent,accepted,processing,completed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(action_sanad_lab_result)d" type="action"
+                                    class="oe_stat_button" icon="fa-flask"
+                                    context="{'default_request_id': id}">
+                                <field name="result_count" widget="statinfo" string="Results"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="patient_id" options="{'no_create': True}"/>
+                                <field name="doctor_id" options="{'no_create': True}"/>
+                                <field name="laboratory_id" options="{'no_create': True}"/>
+                                <field name="consultation_id" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="analysis_type"/>
+                                <field name="date"/>
+                            </group>
+                        </group>
+                        <group string="Instructions">
+                            <field name="instructions" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Results">
+                                <field name="result_ids">
+                                    <list editable="bottom">
+                                        <field name="analysis_name"/>
+                                        <field name="result_value"/>
+                                        <field name="unit"/>
+                                        <field name="reference_range"/>
+                                        <field name="is_out_of_range" widget="boolean_toggle"/>
+                                        <field name="date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sanad_lab_request_search" model="ir.ui.view">
+            <field name="name">sanad.lab.request.search</field>
+            <field name="model">sanad.lab.request</field>
+            <field name="arch" type="xml">
+                <search string="Search Requests">
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="laboratory_id"/>
+                    <field name="analysis_type"/>
+                    <filter string="Pending Action" name="pending" domain="[('status','in',('sent','accepted'))]"/>
+                    <group>
+                        <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                        <filter string="Laboratory" name="group_lab" context="{'group_by': 'laboratory_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sanad_lab_request" model="ir.actions.act_window">
+            <field name="name">Laboratory Requests</field>
+            <field name="res_model">sanad.lab.request</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sanad_lab_request_search"/>
+        </record>
+
+    </data>
+</odoo>

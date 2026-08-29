@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_sanad_patient"
+                  name="Patients"
+                  parent="sanad_core.menu_sanad_directory"
+                  action="action_sanad_patient"
+                  sequence="5"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor"/>
+
+        <menuitem id="menu_sanad_patient_doctor_rel"
+                  name="Care Relationships"
+                  parent="sanad_core.menu_sanad_directory"
+                  action="action_sanad_patient_doctor_rel"
+                  sequence="15"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor"/>
+
+    </data>
+</odoo>

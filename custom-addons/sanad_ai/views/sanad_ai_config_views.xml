@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_ai_config_settings" model="ir.ui.view">
+            <field name="name">sanad.ai.config.settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="SANAD AI" string="SANAD AI" data-key="sanad_ai">
+                        <h2>AI Provider Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="sanad_ai_provider"/>
+                                    <div class="text-muted">
+                                        The active AI backend. Defaults to the offline mock
+                                        provider - no external calls are made until you switch
+                                        this and provide an API key.
+                                    </div>
+                                    <field name="sanad_ai_provider"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="sanad_ai_api_key"/>
+                                    <field name="sanad_ai_api_key" password="True"/>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="sanad_ai_model"/>
+                                    <field name="sanad_ai_model" placeholder="e.g. claude-sonnet-4-6"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

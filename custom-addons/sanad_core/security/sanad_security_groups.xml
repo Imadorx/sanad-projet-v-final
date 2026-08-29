@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- SANAD security groups -->
+
+        <record id="group_sanad_admin" model="res.groups">
+            <field name="name">SANAD Administrator</field>
+            <field name="comment">Full platform administration: users, organizations, security, audit.</field>
+        </record>
+
+        <record id="group_sanad_doctor" model="res.groups">
+            <field name="name">SANAD Doctor</field>
+            <field name="comment">Manages assigned patients: consultations, prescriptions, lab requests.</field>
+        </record>
+
+        <record id="group_sanad_patient" model="res.groups">
+            <field name="name">SANAD Patient</field>
+            <field name="comment">Views own medical record, prescriptions, lab results; uses AI assistant.</field>
+        </record>
+
+        <record id="group_sanad_laboratory" model="res.groups">
+            <field name="name">SANAD Laboratory</field>
+            <field name="comment">Manages analysis requests and uploads results for an assigned laboratory.</field>
+        </record>
+
+        <record id="group_sanad_pharmacy" model="res.groups">
+            <field name="name">SANAD Pharmacy</field>
+            <field name="comment">Manages prescriptions assigned to an assigned pharmacy.</field>
+        </record>
+
+    </data>
+</odoo>

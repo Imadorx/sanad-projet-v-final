@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_sanad_pharmacy_workflow"
+                  name="Pharmacy"
+                  parent="sanad_core.menu_sanad_root"
+                  sequence="40"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_pharmacy"/>
+
+        <menuitem id="menu_sanad_pharmacy_prescription"
+                  name="Prescriptions to Process"
+                  parent="menu_sanad_pharmacy_workflow"
+                  action="action_sanad_pharmacy_prescription"
+                  sequence="10"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_pharmacy"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_sanad_patient_admin,sanad.patient.admin,model_sanad_patient,sanad_core.group_sanad_admin,1,1,1,1
+access_sanad_patient_doctor,sanad.patient.doctor,model_sanad_patient,sanad_core.group_sanad_doctor,1,1,1,0
+access_sanad_patient_patient,sanad.patient.patient,model_sanad_patient,sanad_core.group_sanad_patient,1,0,0,0
+access_sanad_patient_laboratory,sanad.patient.laboratory,model_sanad_patient,sanad_core.group_sanad_laboratory,1,0,0,0
+access_sanad_patient_pharmacy,sanad.patient.pharmacy,model_sanad_patient,sanad_core.group_sanad_pharmacy,1,0,0,0
+
+access_sanad_patient_doctor_rel_admin,sanad.patient.doctor.rel.admin,model_sanad_patient_doctor_rel,sanad_core.group_sanad_admin,1,1,1,1
+access_sanad_patient_doctor_rel_doctor,sanad.patient.doctor.rel.doctor,model_sanad_patient_doctor_rel,sanad_core.group_sanad_doctor,1,1,1,0
+access_sanad_patient_doctor_rel_patient,sanad.patient.doctor.rel.patient,model_sanad_patient_doctor_rel,sanad_core.group_sanad_patient,1,0,0,0

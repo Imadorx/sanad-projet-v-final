@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_laboratory_org_list" model="ir.ui.view">
+            <field name="name">sanad.laboratory.org.list</field>
+            <field name="model">sanad.laboratory.org</field>
+            <field name="arch" type="xml">
+                <list string="Laboratories">
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_laboratory_org_form" model="ir.ui.view">
+            <field name="name">sanad.laboratory.org.form</field>
+            <field name="model">sanad.laboratory.org</field>
+            <field name="arch" type="xml">
+                <form string="Laboratory">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sanad_laboratory_org" model="ir.actions.act_window">
+            <field name="name">Laboratories</field>
+            <field name="res_model">sanad.laboratory.org</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

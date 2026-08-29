@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================================== -->
+        <!-- sanad.medical.record                                   -->
+        <!-- ===================================================== -->
+
+        <record id="rule_sanad_medical_record_doctor" model="ir.rule">
+            <field name="name">Medical Record: doctor sees assigned patients only</field>
+            <field name="model_id" ref="model_sanad_medical_record"/>
+            <field name="domain_force">
+                [('patient_id.care_rel_ids.doctor_id.user_id', '=', user.id),
+                 ('patient_id.care_rel_ids.active', '=', True)]
+            </field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="rule_sanad_medical_record_patient" model="ir.rule">
+            <field name="name">Medical Record: patient sees own record only</field>
+            <field name="model_id" ref="model_sanad_medical_record"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <record id="rule_sanad_medical_record_admin" model="ir.rule">
+            <field name="name">Medical Record: admin full access</field>
+            <field name="model_id" ref="model_sanad_medical_record"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+        <!-- ===================================================== -->
+        <!-- sanad.consultation                                     -->
+        <!-- ===================================================== -->
+
+        <record id="rule_sanad_consultation_doctor" model="ir.rule">
+            <field name="name">Consultation: doctor sees own consultations with assigned patients</field>
+            <field name="model_id" ref="model_sanad_consultation"/>
+            <field name="domain_force">
+                [('patient_id.care_rel_ids.doctor_id.user_id', '=', user.id),
+                 ('patient_id.care_rel_ids.active', '=', True)]
+            </field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="rule_sanad_consultation_patient" model="ir.rule">
+            <field name="name">Consultation: patient sees own consultations only</field>
+            <field name="model_id" ref="model_sanad_consultation"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <record id="rule_sanad_consultation_admin" model="ir.rule">
+            <field name="name">Consultation: admin full access</field>
+            <field name="model_id" ref="model_sanad_consultation"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+        <!-- ===================================================== -->
+        <!-- sanad.prescription                                     -->
+        <!-- ===================================================== -->
+
+        <record id="rule_sanad_prescription_doctor" model="ir.rule">
+            <field name="name">Prescription: doctor sees own prescriptions for assigned patients</field>
+            <field name="model_id" ref="model_sanad_prescription"/>
+            <field name="domain_force">
+                [('patient_id.care_rel_ids.doctor_id.user_id', '=', user.id),
+                 ('patient_id.care_rel_ids.active', '=', True)]
+            </field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="rule_sanad_prescription_patient" model="ir.rule">
+            <field name="name">Prescription: patient sees own prescriptions only</field>
+            <field name="model_id" ref="model_sanad_prescription"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <!-- Pharmacy: sees prescriptions assigned to its own org only.
+             pharmacy_id.user_ids is a Many2many defined on sanad.pharmacy.org
+             (extended in models/pharmacy_org_ext.py) mapping staff users to
+             their pharmacy. Matches PRD 14.3 "Pharmacy can view
+             prescriptions assigned to pharmacy" / "cannot view medical
+             records" - this rule only restricts row visibility; field-level
+             restriction (hiding unrelated clinical fields) is handled at
+             the view level in Phase 5. -->
+        <record id="rule_sanad_prescription_pharmacy" model="ir.rule">
+            <field name="name">Prescription: pharmacy user sees assigned prescriptions only</field>
+            <field name="model_id" ref="model_sanad_prescription"/>
+            <field name="domain_force">[('pharmacy_id.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_pharmacy'))]"/>
+        </record>
+
+        <record id="rule_sanad_prescription_admin" model="ir.rule">
+            <field name="name">Prescription: admin full access</field>
+            <field name="model_id" ref="model_sanad_prescription"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

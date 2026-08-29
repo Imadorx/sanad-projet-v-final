@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- The AI Interaction Audit Log menu/action already exists in
+             sanad_core (menu_sanad_ai_audit / action_sanad_ai_log) since
+             the sanad.ai.log model itself was defined there in Phase 1.
+             This module adds no duplicate menu for it - installing
+             sanad_ai simply means that menu starts showing real data.
+             AI provider configuration lives in Settings > General
+             Settings > SANAD AI (see sanad_ai_config_views.xml), which
+             is already reachable via Odoo's standard Settings menu, so
+             no additional top-level menu entry is needed here either. -->
+    </data>
+</odoo>

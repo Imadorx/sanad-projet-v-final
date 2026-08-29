@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_patient_doctor_rel_list" model="ir.ui.view">
+            <field name="name">sanad.patient.doctor.rel.list</field>
+            <field name="model">sanad.patient.doctor.rel</field>
+            <field name="arch" type="xml">
+                <list string="Care Relationships">
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="relationship_type"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_patient_doctor_rel_form" model="ir.ui.view">
+            <field name="name">sanad.patient.doctor.rel.form</field>
+            <field name="model">sanad.patient.doctor.rel</field>
+            <field name="arch" type="xml">
+                <form string="Care Relationship">
+                    <sheet>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="relationship_type"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sanad_patient_doctor_rel" model="ir.actions.act_window">
+            <field name="name">Care Relationships</field>
+            <field name="res_model">sanad.patient.doctor.rel</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_pharmacy_org_list" model="ir.ui.view">
+            <field name="name">sanad.pharmacy.org.list</field>
+            <field name="model">sanad.pharmacy.org</field>
+            <field name="arch" type="xml">
+                <list string="Pharmacies">
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_pharmacy_org_form" model="ir.ui.view">
+            <field name="name">sanad.pharmacy.org.form</field>
+            <field name="model">sanad.pharmacy.org</field>
+            <field name="arch" type="xml">
+                <form string="Pharmacy">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sanad_pharmacy_org" model="ir.actions.act_window">
+            <field name="name">Pharmacies</field>
+            <field name="res_model">sanad.pharmacy.org</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

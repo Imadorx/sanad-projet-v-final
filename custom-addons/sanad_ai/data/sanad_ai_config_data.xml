@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Safe-by-default configuration: no external AI provider is
+             called until an administrator explicitly configures one in
+             Settings > General Settings > SANAD AI. Out of the box,
+             every AI feature uses the offline mock provider. -->
+        <record id="config_sanad_ai_provider" model="ir.config_parameter">
+            <field name="key">sanad_ai.provider</field>
+            <field name="value">mock</field>
+        </record>
+    </data>
+</odoo>

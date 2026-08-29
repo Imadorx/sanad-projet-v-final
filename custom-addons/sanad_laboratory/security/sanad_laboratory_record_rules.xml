@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================================== -->
+        <!-- sanad.lab.request                                      -->
+        <!-- ===================================================== -->
+
+        <record id="rule_sanad_lab_request_doctor" model="ir.rule">
+            <field name="name">Lab Request: doctor sees own requests for assigned patients</field>
+            <field name="model_id" ref="model_sanad_lab_request"/>
+            <field name="domain_force">
+                [('patient_id.care_rel_ids.doctor_id.user_id', '=', user.id),
+                 ('patient_id.care_rel_ids.active', '=', True)]
+            </field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="rule_sanad_lab_request_patient" model="ir.rule">
+            <field name="name">Lab Request: patient sees own requests only</field>
+            <field name="model_id" ref="model_sanad_lab_request"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <record id="rule_sanad_lab_request_laboratory" model="ir.rule">
+            <field name="name">Lab Request: laboratory user sees requests routed to own lab</field>
+            <field name="model_id" ref="model_sanad_lab_request"/>
+            <field name="domain_force">[('laboratory_id.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_laboratory'))]"/>
+        </record>
+
+        <record id="rule_sanad_lab_request_admin" model="ir.rule">
+            <field name="name">Lab Request: admin full access</field>
+            <field name="model_id" ref="model_sanad_lab_request"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+        <!-- ===================================================== -->
+        <!-- sanad.lab.result                                       -->
+        <!-- ===================================================== -->
+
+        <record id="rule_sanad_lab_result_doctor" model="ir.rule">
+            <field name="name">Lab Result: doctor sees results for assigned patients</field>
+            <field name="model_id" ref="model_sanad_lab_result"/>
+            <field name="domain_force">
+                [('patient_id.care_rel_ids.doctor_id.user_id', '=', user.id),
+                 ('patient_id.care_rel_ids.active', '=', True)]
+            </field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="rule_sanad_lab_result_patient" model="ir.rule">
+            <field name="name">Lab Result: patient sees own results only</field>
+            <field name="model_id" ref="model_sanad_lab_result"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <record id="rule_sanad_lab_result_laboratory" model="ir.rule">
+            <field name="name">Lab Result: laboratory user sees results for own lab's requests</field>
+            <field name="model_id" ref="model_sanad_lab_result"/>
+            <field name="domain_force">[('request_id.laboratory_id.user_ids', 'in', [user.id])]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_laboratory'))]"/>
+        </record>
+
+        <record id="rule_sanad_lab_result_admin" model="ir.rule">
+            <field name="name">Lab Result: admin full access</field>
+            <field name="model_id" ref="model_sanad_lab_result"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

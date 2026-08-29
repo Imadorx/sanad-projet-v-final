@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="demo_partner_patient_1" model="res.partner">
+            <field name="name">Youssef Bennani</field>
+            <field name="email">youssef.bennani@example.com</field>
+            <field name="phone">+212 6 11 22 33 44</field>
+            <field name="company_type">person</field>
+        </record>
+
+        <record id="demo_user_patient_1" model="res.users">
+            <field name="name">Youssef Bennani</field>
+            <field name="login">patient.demo@sanad-health.example.com</field>
+            <field name="partner_id" ref="demo_partner_patient_1"/>
+            <field name="groups_id" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <record id="demo_patient_1" model="sanad.patient">
+            <field name="partner_id" ref="demo_partner_patient_1"/>
+            <field name="user_id" ref="demo_user_patient_1"/>
+            <field name="birth_date">1985-04-12</field>
+            <field name="gender">male</field>
+            <field name="blood_group">o_pos</field>
+            <field name="allergies">Penicillin</field>
+            <field name="chronic_diseases">Type 2 Diabetes</field>
+            <field name="emergency_contact_name">Nadia Bennani</field>
+            <field name="emergency_contact_phone">+212 6 55 66 77 88</field>
+            <field name="emergency_contact_relation">Spouse</field>
+        </record>
+
+        <record id="demo_care_rel_1" model="sanad.patient.doctor.rel">
+            <field name="patient_id" ref="demo_patient_1"/>
+            <field name="doctor_id" ref="sanad_core.demo_doctor_1"/>
+            <field name="relationship_type">primary</field>
+            <field name="start_date">2026-01-15</field>
+        </record>
+
+    </data>
+</odoo>

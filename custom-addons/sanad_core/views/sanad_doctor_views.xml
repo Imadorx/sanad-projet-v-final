@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_doctor_list" model="ir.ui.view">
+            <field name="name">sanad.doctor.list</field>
+            <field name="model">sanad.doctor</field>
+            <field name="arch" type="xml">
+                <list string="Doctors">
+                    <field name="name"/>
+                    <field name="specialty_id"/>
+                    <field name="cabinet_id"/>
+                    <field name="license_number"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_doctor_form" model="ir.ui.view">
+            <field name="name">sanad.doctor.form</field>
+            <field name="model">sanad.doctor</field>
+            <field name="arch" type="xml">
+                <form string="Doctor">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Identity (read-only, sourced from Contact)">
+                                <field name="partner_id"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                                <field name="user_id"
+                                       options="{'no_create': True}"
+                                       help="Login account granted to this doctor. Required before assigning the Doctor security group."/>
+                                <field name="phone" readonly="1"/>
+                                <field name="email" readonly="1"/>
+                            </group>
+                            <group string="Professional Information">
+                                <field name="specialty_id"/>
+                                <field name="license_number"/>
+                                <field name="cabinet_id"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group string="Background">
+                            <field name="professional_info" nolabel="1" placeholder="Qualifications, experience, bio..."/>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sanad_doctor_search" model="ir.ui.view">
+            <field name="name">sanad.doctor.search</field>
+            <field name="model">sanad.doctor</field>
+            <field name="arch" type="xml">
+                <search string="Search Doctors">
+                    <field name="name"/>
+                    <field name="license_number"/>
+                    <field name="specialty_id"/>
+                    <field name="cabinet_id"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <group>
+                        <filter string="Specialty" name="group_specialty" context="{'group_by': 'specialty_id'}"/>
+                        <filter string="Cabinet" name="group_cabinet" context="{'group_by': 'cabinet_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sanad_doctor" model="ir.actions.act_window">
+            <field name="name">Doctors</field>
+            <field name="res_model">sanad.doctor</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sanad_doctor_search"/>
+        </record>
+
+    </data>
+</odoo>

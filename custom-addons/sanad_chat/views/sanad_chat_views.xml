@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_chat_conversation_list" model="ir.ui.view">
+            <field name="name">sanad.chat.conversation.list</field>
+            <field name="model">sanad.chat.conversation</field>
+            <field name="arch" type="xml">
+                <list string="Conversations">
+                    <field name="display_name"/>
+                    <field name="conversation_type"/>
+                    <field name="last_message_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_chat_conversation_form" model="ir.ui.view">
+            <field name="name">sanad.chat.conversation.form</field>
+            <field name="model">sanad.chat.conversation</field>
+            <field name="arch" type="xml">
+                <form string="Conversation">
+                    <sheet>
+                        <group>
+                            <field name="participant_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="conversation_type"/>
+                            <field name="patient_id" invisible="conversation_type != 'doctor_patient'" options="{'no_create': True}"/>
+                        </group>
+                    </sheet>
+                    <chatter open_attachments="True"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sanad_chat_conversation_search" model="ir.ui.view">
+            <field name="name">sanad.chat.conversation.search</field>
+            <field name="model">sanad.chat.conversation</field>
+            <field name="arch" type="xml">
+                <search string="Search Conversations">
+                    <field name="participant_ids"/>
+                    <group>
+                        <filter string="Type" name="group_type" context="{'group_by': 'conversation_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sanad_chat_conversation" model="ir.actions.act_window">
+            <field name="name">Conversations</field>
+            <field name="res_model">sanad.chat.conversation</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sanad_chat_conversation_search"/>
+            <field name="context">{'search_default_group_type': 1}</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Prescription visibility/write access for pharmacy staff is
+             already fully defined in sanad_medical:
+               - security/ir.model.access.csv: access_sanad_prescription_pharmacy
+                 (read + write, no create/unlink - a pharmacy processes
+                 prescriptions, it does not author them)
+               - security/sanad_medical_record_rules.xml:
+                 rule_sanad_prescription_pharmacy (scoped to
+                 pharmacy_id.user_ids containing the current user)
+             This file is reserved for any additional pharmacy-specific
+             rules introduced by this module. None are needed yet: the
+             workflow actions added in models/prescription_ext.py operate
+             within the write access already granted above. -->
+    </data>
+</odoo>

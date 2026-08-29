@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================================================== -->
+        <!-- sanad.patient                                          -->
+        <!-- ===================================================== -->
+
+        <!-- Patient: can only see/edit their own record -->
+        <record id="rule_sanad_patient_self" model="ir.rule">
+            <field name="name">Patient: own record only</field>
+            <field name="model_id" ref="model_sanad_patient"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <!-- Doctor: only patients with an ACTIVE care relationship to
+             this doctor's own sanad.doctor record. This is the core
+             RBAC enforcement point referenced throughout the PRD -
+             a doctor with no active relationship simply cannot see
+             the patient, full stop, regardless of what any other
+             module tries to display. -->
+        <record id="rule_sanad_patient_doctor_scoped" model="ir.rule">
+            <field name="name">Patient: doctor sees only assigned patients</field>
+            <field name="model_id" ref="model_sanad_patient"/>
+            <field name="domain_force">
+                [('care_rel_ids.doctor_id.user_id', '=', user.id),
+                 ('care_rel_ids.active', '=', True)]
+            </field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="rule_sanad_patient_admin_full" model="ir.rule">
+            <field name="name">Patient: admin full access</field>
+            <field name="model_id" ref="model_sanad_patient"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+        <!-- ===================================================== -->
+        <!-- sanad.patient.doctor.rel                               -->
+        <!-- ===================================================== -->
+
+        <!-- Doctor: can see/manage relationships involving themselves only.
+             This lets a doctor initiate/end their own care relationships
+             (e.g. accepting a new patient, discharging one) without being
+             able to touch another doctor's relationship rows. -->
+        <record id="rule_sanad_patient_doctor_rel_doctor" model="ir.rule">
+            <field name="name">Care Relationship: doctor sees own relationships</field>
+            <field name="model_id" ref="model_sanad_patient_doctor_rel"/>
+            <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <!-- Patient: read-only visibility into who is treating them -->
+        <record id="rule_sanad_patient_doctor_rel_patient" model="ir.rule">
+            <field name="name">Care Relationship: patient sees own relationships</field>
+            <field name="model_id" ref="model_sanad_patient_doctor_rel"/>
+            <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_patient'))]"/>
+        </record>
+
+        <record id="rule_sanad_patient_doctor_rel_admin_full" model="ir.rule">
+            <field name="name">Care Relationship: admin full access</field>
+            <field name="model_id" ref="model_sanad_patient_doctor_rel"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sanad_core.group_sanad_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

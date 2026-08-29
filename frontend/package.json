@@ -1,0 +1,24 @@
+{
+  "name": "sanad-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SANAD Healthcare Platform - React frontend",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
+    "axios": "^1.7.4",
+    "recharts": "^2.12.7"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "@vitejs/plugin-react": "^4.3.1"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"See frontend/TESTS.md for the manual/integration test checklist\""
+  }
+}

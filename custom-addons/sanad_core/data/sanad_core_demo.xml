@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Specialties -->
+        <record id="demo_specialty_general" model="sanad.medical.specialty">
+            <field name="name">General Medicine</field>
+            <field name="code">GEN</field>
+        </record>
+        <record id="demo_specialty_cardio" model="sanad.medical.specialty">
+            <field name="name">Cardiology</field>
+            <field name="code">CARDIO</field>
+        </record>
+        <record id="demo_specialty_pedia" model="sanad.medical.specialty">
+            <field name="name">Pediatrics</field>
+            <field name="code">PEDIA</field>
+        </record>
+
+        <!-- Organizations -->
+        <record id="demo_cabinet_main" model="sanad.medical.cabinet">
+            <field name="name">SANAD Central Medical Cabinet</field>
+            <field name="phone">+212 5 00 00 00 01</field>
+            <field name="email">cabinet@sanad-health.example.com</field>
+            <field name="address">Fes, Morocco</field>
+        </record>
+
+        <record id="demo_lab_main" model="sanad.laboratory.org">
+            <field name="name">SANAD Central Laboratory</field>
+            <field name="phone">+212 5 00 00 00 02</field>
+            <field name="email">lab@sanad-health.example.com</field>
+            <field name="address">Fes, Morocco</field>
+        </record>
+
+        <record id="demo_pharmacy_main" model="sanad.pharmacy.org">
+            <field name="name">SANAD Central Pharmacy</field>
+            <field name="phone">+212 5 00 00 00 03</field>
+            <field name="email">pharmacy@sanad-health.example.com</field>
+            <field name="address">Fes, Morocco</field>
+        </record>
+
+        <!-- Demo doctor: partner + user + doctor profile -->
+        <record id="demo_partner_doctor_1" model="res.partner">
+            <field name="name">Dr. Amina El Fassi</field>
+            <field name="email">amina.elfassi@sanad-health.example.com</field>
+            <field name="phone">+212 6 00 00 00 10</field>
+            <field name="company_type">person</field>
+        </record>
+
+        <record id="demo_user_doctor_1" model="res.users">
+            <field name="name">Dr. Amina El Fassi</field>
+            <field name="login">doctor.demo@sanad-health.example.com</field>
+            <field name="partner_id" ref="demo_partner_doctor_1"/>
+            <field name="groups_id" eval="[(4, ref('sanad_core.group_sanad_doctor'))]"/>
+        </record>
+
+        <record id="demo_doctor_1" model="sanad.doctor">
+            <field name="partner_id" ref="demo_partner_doctor_1"/>
+            <field name="user_id" ref="demo_user_doctor_1"/>
+            <field name="specialty_id" ref="demo_specialty_cardio"/>
+            <field name="license_number">MA-LIC-000123</field>
+            <field name="cabinet_id" ref="demo_cabinet_main"/>
+            <field name="professional_info">15 years of experience in cardiology. Demo record for development/testing only.</field>
+        </record>
+
+    </data>
+</odoo>

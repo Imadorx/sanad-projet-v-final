@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_sanad_patient_list" model="ir.ui.view">
+            <field name="name">sanad.patient.list</field>
+            <field name="model">sanad.patient</field>
+            <field name="arch" type="xml">
+                <list string="Patients">
+                    <field name="name"/>
+                    <field name="birth_date"/>
+                    <field name="age"/>
+                    <field name="gender"/>
+                    <field name="blood_group"/>
+                    <field name="phone"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_sanad_patient_form" model="ir.ui.view">
+            <field name="name">sanad.patient.form</field>
+            <field name="model">sanad.patient</field>
+            <field name="arch" type="xml">
+                <form string="Patient">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Identity (read-only, sourced from Contact)">
+                                <field name="partner_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="user_id" options="{'no_create': True}"/>
+                                <field name="phone" readonly="1"/>
+                                <field name="email" readonly="1"/>
+                                <field name="address" readonly="1"/>
+                            </group>
+                            <group string="Demographics">
+                                <field name="birth_date"/>
+                                <field name="age"/>
+                                <field name="gender"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Medical Information">
+                                <field name="blood_group"/>
+                                <field name="allergies"/>
+                                <field name="chronic_diseases"/>
+                            </group>
+                            <group string="Emergency Contact">
+                                <field name="emergency_contact_name"/>
+                                <field name="emergency_contact_phone"/>
+                                <field name="emergency_contact_relation"/>
+                            </group>
+                        </group>
+                        <group string="Medical Notes">
+                            <field name="medical_notes" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Care Team">
+                                <field name="care_rel_ids">
+                                    <list editable="bottom">
+                                        <field name="doctor_id"/>
+                                        <field name="relationship_type"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="active"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sanad_patient_search" model="ir.ui.view">
+            <field name="name">sanad.patient.search</field>
+            <field name="model">sanad.patient</field>
+            <field name="arch" type="xml">
+                <search string="Search Patients">
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <group>
+                        <filter string="Gender" name="group_gender" context="{'group_by': 'gender'}"/>
+                        <filter string="Blood Group" name="group_blood" context="{'group_by': 'blood_group'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_sanad_patient" model="ir.actions.act_window">
+            <field name="name">Patients</field>
+            <field name="res_model">sanad.patient</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_sanad_patient_search"/>
+        </record>
+
+    </data>
+</odoo>

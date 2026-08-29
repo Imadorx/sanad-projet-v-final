@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Root application menu -->
+        <menuitem id="menu_sanad_root"
+                  name="SANAD"
+                  sequence="10"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor,sanad_core.group_sanad_patient,sanad_core.group_sanad_laboratory,sanad_core.group_sanad_pharmacy"/>
+
+        <menuitem id="menu_sanad_directory"
+                  name="Directory"
+                  parent="menu_sanad_root"
+                  sequence="10"/>
+
+        <menuitem id="menu_sanad_doctor"
+                  name="Doctors"
+                  parent="menu_sanad_directory"
+                  action="action_sanad_doctor"
+                  sequence="10"
+                  groups="sanad_core.group_sanad_admin,sanad_core.group_sanad_doctor"/>
+
+        <menuitem id="menu_sanad_medical_cabinet"
+                  name="Medical Cabinets"
+                  parent="menu_sanad_directory"
+                  action="action_sanad_medical_cabinet"
+                  sequence="20"
+                  groups="sanad_core.group_sanad_admin"/>
+
+        <menuitem id="menu_sanad_laboratory_org"
+                  name="Laboratories"
+                  parent="menu_sanad_directory"
+                  action="action_sanad_laboratory_org"
+                  sequence="30"
+                  groups="sanad_core.group_sanad_admin"/>
+
+        <menuitem id="menu_sanad_pharmacy_org"
+                  name="Pharmacies"
+                  parent="menu_sanad_directory"
+                  action="action_sanad_pharmacy_org"
+                  sequence="40"
+                  groups="sanad_core.group_sanad_admin"/>
+
+        <menuitem id="menu_sanad_ai_audit"
+                  name="AI Audit Log"
+                  parent="menu_sanad_root"
+                  action="action_sanad_ai_log"
+                  sequence="80"
+                  groups="sanad_core.group_sanad_admin"/>
+
+        <menuitem id="menu_sanad_configuration"
+                  name="Configuration"
+                  parent="menu_sanad_root"
+                  sequence="90"
+                  groups="sanad_core.group_sanad_admin"/>
+
+        <menuitem id="menu_sanad_medical_specialty"
+                  name="Medical Specialties"
+                  parent="menu_sanad_configuration"
+                  action="action_sanad_medical_specialty"
+                  sequence="10"
+                  groups="sanad_core.group_sanad_admin"/>
+
+    </data>
+</odoo>

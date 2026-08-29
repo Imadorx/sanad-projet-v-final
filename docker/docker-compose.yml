@@ -1,0 +1,61 @@
+version: "3.8"
+
+# SANAD Healthcare Platform - full stack
+# Services: PostgreSQL, Odoo 19 (backend + REST API), React frontend (Nginx)
+#
+# Usage:
+#   Development: docker compose up -d
+#   Then: Odoo backend at http://localhost:8069
+#         React frontend (dev, hot-reload) run separately via `npm run dev`
+#         React frontend (production build) at http://localhost:3000 if using the frontend service below
+
+services:
+  db:
+    image: postgres:16
+    container_name: sanad_postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-odoo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-odoo}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - sanad_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-odoo}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:19
+    container_name: sanad_odoo
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      HOST: db
+      USER: ${POSTGRES_USER:-odoo}
+      PASSWORD: ${POSTGRES_PASSWORD:-odoo}
+    ports:
+      - "8069:8069"
+    volumes:
+      - ../custom-addons:/mnt/extra-addons
+      - sanad_odoo_data:/var/lib/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: sanad_frontend
+    depends_on:
+      - odoo
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+
+volumes:
+  sanad_db_data:
+  sanad_odoo_data:

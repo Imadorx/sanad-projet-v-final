@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- No new groups here - sanad_patient reuses the SANAD roles
+             defined in sanad_core (group_sanad_admin, group_sanad_doctor,
+             group_sanad_patient, group_sanad_laboratory, group_sanad_pharmacy).
+             This file is reserved for any patient-specific sub-permissions
+             that may be needed later (e.g. a "read-only patient viewer"
+             role for front-desk staff) without touching sanad_core. -->
+    </data>
+</odoo>
