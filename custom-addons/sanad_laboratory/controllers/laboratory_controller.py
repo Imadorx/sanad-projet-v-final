@@ -74,7 +74,7 @@ class SanadLaboratoryController(http.Controller):
         data['results'] = [serialize_lab_result(res) for res in r.result_ids]
         return json_response({'lab_request': data})
 
-    @http.route('/api/lab-requests', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/lab-requests', type='http', auth='user', methods=['POST'], csrf=False)
     def create_lab_request(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         try:
@@ -85,7 +85,7 @@ class SanadLaboratoryController(http.Controller):
         except ValidationError as e:
             return error_response(str(e), 400, 'validation_error')
 
-    @http.route('/api/lab-requests/<int:request_id>/action', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/lab-requests/<int:request_id>/action', type='http', auth='user', methods=['POST'], csrf=False)
     def transition_lab_request(self, request_id, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         action = params.get('action')
@@ -116,7 +116,7 @@ class SanadLaboratoryController(http.Controller):
         results = request.env['sanad.lab.result'].search(domain, order='date desc')
         return json_response({'lab_results': [serialize_lab_result(r) for r in results]})
 
-    @http.route('/api/lab-results', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/lab-results', type='http', auth='user', methods=['POST'], csrf=False)
     def create_lab_result(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         try:

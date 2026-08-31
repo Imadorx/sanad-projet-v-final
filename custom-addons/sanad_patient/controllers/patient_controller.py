@@ -80,7 +80,7 @@ class SanadPatientController(http.Controller):
         except AccessError as e:
             return error_response(str(e), 403, 'access_denied')
 
-    @http.route('/api/patients', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/patients', type='http', auth='user', methods=['POST'], csrf=False)
     def create_patient(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         try:
@@ -91,7 +91,7 @@ class SanadPatientController(http.Controller):
         except ValidationError as e:
             return error_response(str(e), 400, 'validation_error')
 
-    @http.route('/api/patients/<int:patient_id>', type='jsonrpc', auth='user', methods=['PUT'], csrf=False)
+    @http.route('/api/patients/<int:patient_id>', type='http', auth='user', methods=['PUT'], csrf=False)
     def update_patient(self, patient_id, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         try:
@@ -113,7 +113,7 @@ class SanadPatientController(http.Controller):
         except AccessError as e:
             return error_response(str(e), 403, 'access_denied')
 
-    @http.route('/api/care-relationships', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/care-relationships', type='http', auth='user', methods=['POST'], csrf=False)
     def create_care_relationship(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         try:

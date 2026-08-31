@@ -138,7 +138,8 @@ textarea { min-height: 80px; resize: vertical; }
   border-radius: 999px; font-size: 0.65rem; padding: 0.05rem 0.35rem;
 }
 .sanad-notification-dropdown {
-  position: absolute; right: 0; top: 2rem; width: 260px; background: #fff; color: var(--sanad-text);
+  position: absolute; right: 0; top: 2rem; width: 260px; max-height: 300px; overflow-y: auto;
+  background: #fff; color: var(--sanad-text);
   border-radius: var(--sanad-radius); box-shadow: var(--sanad-shadow); padding: 0.5rem; z-index: 20;
 }
 .sanad-notification-item { padding: 0.5rem; border-bottom: 1px solid var(--sanad-border); }

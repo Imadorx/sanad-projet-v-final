@@ -84,7 +84,7 @@ class SanadMedicalController(http.Controller):
             return error_response('Consultation not found.', 404, 'not_found')
         return json_response({'consultation': serialize_consultation(c)})
 
-    @http.route('/api/consultations', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/consultations', type='http', auth='user', methods=['POST'], csrf=False)
     def create_consultation(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         try:
@@ -104,9 +104,14 @@ class SanadMedicalController(http.Controller):
         prescriptions = request.env['sanad.prescription'].search(domain, order='date desc')
         return json_response({'prescriptions': [serialize_prescription(p) for p in prescriptions]})
 
-    @http.route('/api/prescriptions', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/prescriptions', type='http', auth='user', methods=['POST'], csrf=False)
     def create_prescription(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
+        if not params.get('doctor_id'):
+            doctor = request.env['sanad.doctor'].search(
+                [('user_id', '=', request.env.uid)], limit=1)
+            if doctor:
+                params['doctor_id'] = doctor.id
         try:
             p = request.env['sanad.prescription'].create(params)
             return json_response({'prescription': serialize_prescription(p)}, 201)
@@ -114,3 +119,5 @@ class SanadMedicalController(http.Controller):
             return error_response(str(e), 403, 'access_denied')
         except ValidationError as e:
             return error_response(str(e), 400, 'validation_error')
+        except Exception as e:
+            return error_response(str(e), 422, 'validation_error')

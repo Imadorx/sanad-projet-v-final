@@ -33,6 +33,16 @@ def serialize_pharmacy_prescription(p):
     }
 
 
+def serialize_pharmacy_org(org):
+    return {
+        'id': org.id,
+        'name': org.name,
+        'address': org.address,
+        'phone': org.phone,
+        'email': org.email,
+    }
+
+
 class SanadPharmacyController(http.Controller):
     """REST endpoints for the pharmacy prescription-processing workflow.
     Row visibility is enforced entirely by the existing record rule
@@ -40,6 +50,16 @@ class SanadPharmacyController(http.Controller):
     pharmacy_id.user_ids) - this controller does not add its own
     filtering logic, it relies on the ORM record rule as the single
     source of truth for access."""
+
+    @http.route('/api/pharmacies', type='http', auth='user', methods=['GET'], csrf=False)
+    def list_pharmacies(self, **kwargs):
+        """List all active pharmacy organizations.
+        Doctors need this to assign a pharmacy when creating a prescription."""
+        orgs = request.env['sanad.pharmacy.org'].search(
+            [('active', '=', True)], order='name')
+        return json_response({
+            'pharmacies': [serialize_pharmacy_org(o) for o in orgs]
+        })
 
     @http.route('/api/pharmacy/prescriptions', type='http', auth='user', methods=['GET'], csrf=False)
     def list_pharmacy_prescriptions(self, **kwargs):
@@ -52,7 +72,7 @@ class SanadPharmacyController(http.Controller):
         })
 
     @http.route('/api/pharmacy/prescriptions/<int:prescription_id>/action',
-                type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+                type='http', auth='user', methods=['POST'], csrf=False)
     def transition_prescription(self, prescription_id, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         action = params.get('action')

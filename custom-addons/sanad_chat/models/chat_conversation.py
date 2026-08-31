@@ -87,7 +87,6 @@ class SanadChatConversation(models.Model):
                         raise ValidationError(
                             'This doctor has no active care relationship with '
                             'this patient - a conversation cannot be started.')
-                conv.patient_id = patient.id
 
             elif conv.conversation_type == 'doctor_laboratory':
                 lab_org = self.env['sanad.laboratory.org'].search(
@@ -104,6 +103,24 @@ class SanadChatConversation(models.Model):
                     raise ValidationError(
                         'A doctor_pharmacy conversation requires the other '
                         'participant to be pharmacy staff.')
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('conversation_type') == 'doctor_patient' and not vals.get('patient_id'):
+                participant_ids = vals.get('participant_ids', [])
+                if participant_ids and isinstance(participant_ids[0], (list, tuple)):
+                    user_ids = [cmd[2] for cmd in participant_ids if cmd[0] == 6]
+                else:
+                    user_ids = participant_ids
+                doctor = self.env['sanad.doctor'].search([('user_id', 'in', user_ids)], limit=1)
+                if doctor:
+                    other_users = self.env['res.users'].browse(user_ids) - doctor.user_id
+                    patient = self.env['sanad.patient'].search(
+                        [('user_id', 'in', other_users.ids)], limit=1)
+                    if patient:
+                        vals['patient_id'] = patient.id
+        return super().create(vals_list)
 
     def action_post_message(self, body):
         """Post a message and notify participants in real time via

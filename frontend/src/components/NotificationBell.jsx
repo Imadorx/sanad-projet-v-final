@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import chatService from '../services/chatService';
 import { useAuth } from '../auth/AuthContext';
 
@@ -10,10 +11,12 @@ import { useAuth } from '../auth/AuthContext';
  */
 export default function NotificationBell() {
   const { user } = useAuth();
+  const location = useLocation();
   const [unseenCount, setUnseenCount] = useState(0);
   const lastSeenIdRef = useRef(0);
   const [open, setOpen] = useState(false);
   const [recent, setRecent] = useState([]);
+  const bellRef = useRef(null);
 
   useEffect(() => {
     if (!user) return undefined;
@@ -43,8 +46,25 @@ export default function NotificationBell() {
     return () => { cancelled = true; clearInterval(interval); };
   }, [user]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!open) return undefined;
+    const handleClickOutside = (e) => {
+      if (bellRef.current && !bellRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
+
+  // Close dropdown on navigation
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   return (
-    <div className="sanad-notification-bell">
+    <div className="sanad-notification-bell" ref={bellRef}>
       <button
         className="sanad-bell-btn"
         onClick={() => { setOpen((o) => !o); if (!open) setUnseenCount(0); }}

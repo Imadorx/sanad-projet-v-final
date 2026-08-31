@@ -14,7 +14,7 @@ class SanadAiController(http.Controller):
     filtering, or audit logging itself. This keeps the safety pipeline
     defined in exactly one place."""
 
-    @http.route('/api/ai/search', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/ai/search', type='http', auth='user', methods=['POST'], csrf=False)
     def ai_search(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         query = (params.get('query') or '').strip()
@@ -30,7 +30,7 @@ class SanadAiController(http.Controller):
         except UserError as e:
             return error_response(str(e), 503, 'ai_unavailable')
 
-    @http.route('/api/ai/explain', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/ai/explain', type='http', auth='user', methods=['POST'], csrf=False)
     def ai_explain(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         model_name = params.get('model')
@@ -45,7 +45,7 @@ class SanadAiController(http.Controller):
         except UserError as e:
             return error_response(str(e), 503, 'ai_unavailable')
 
-    @http.route('/api/ai/translate', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/ai/translate', type='http', auth='user', methods=['POST'], csrf=False)
     def ai_translate(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         text = (params.get('text') or '').strip()
@@ -60,7 +60,7 @@ class SanadAiController(http.Controller):
         except UserError as e:
             return error_response(str(e), 503, 'ai_unavailable')
 
-    @http.route('/api/ai/tts', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/ai/tts', type='http', auth='user', methods=['POST'], csrf=False)
     def ai_tts(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         text = (params.get('text') or '').strip()

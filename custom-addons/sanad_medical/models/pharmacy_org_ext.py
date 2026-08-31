@@ -15,6 +15,6 @@ class SanadPharmacyOrgExtension(models.Model):
 
     user_ids = fields.Many2many(
         'res.users', string='Pharmacy Staff',
-        domain=[('group_ids', 'in', [])],  # left open; group filter is UI-side via the Pharmacy security group
+        domain=[],
         help='Users who log in as staff of this pharmacy. Used to scope '
              'which prescriptions they can see and process.')

@@ -1,6 +1,10 @@
 import apiClient from './apiClient';
 
 const pharmacyService = {
+  async listPharmacies() {
+    const res = await apiClient.get('/api/pharmacies');
+    return res.data.pharmacies;
+  },
   async listPrescriptions(status) {
     const res = await apiClient.get('/api/pharmacy/prescriptions', {
       params: status ? { status } : {},

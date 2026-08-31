@@ -51,8 +51,8 @@ export default function ChatWidget() {
       try {
         const msgs = await chatService.listMessages(selected.id);
         if (cancelled) return;
-        setMessages(msgs);
-        if (msgs.length) lastMessageIdRef.current = msgs[msgs.length - 1].id;
+        setMessages(msgs || []);
+        if (msgs && msgs.length) lastMessageIdRef.current = msgs[msgs.length - 1].id;
       } catch (err) {
         if (!cancelled) setError(err.apiMessage || 'Failed to load messages.');
       }
@@ -62,7 +62,7 @@ export default function ChatWidget() {
     const interval = setInterval(async () => {
       try {
         const newMsgs = await chatService.listMessages(selected.id, lastMessageIdRef.current);
-        if (cancelled || newMsgs.length === 0) return;
+        if (cancelled || !newMsgs || newMsgs.length === 0) return;
         setMessages((prev) => [...prev, ...newMsgs]);
         lastMessageIdRef.current = newMsgs[newMsgs.length - 1].id;
       } catch {
@@ -84,8 +84,10 @@ export default function ChatWidget() {
     setSending(true);
     try {
       const message = await chatService.postMessage(selected.id, body);
-      setMessages((prev) => [...prev, message]);
-      lastMessageIdRef.current = message.id;
+      if (message) {
+        setMessages((prev) => [...prev, message]);
+        lastMessageIdRef.current = message.id;
+      }
       setDraft('');
     } catch (err) {
       setError(err.apiMessage || 'Failed to send message.');
@@ -103,7 +105,7 @@ export default function ChatWidget() {
   return (
     <div className="sanad-chat-widget">
       <aside className="sanad-chat-list">
-        {conversations.map((c) => (
+        {(conversations || []).map((c) => (
           <button
             key={c.id}
             className={`sanad-chat-list-item ${selected?.id === c.id ? 'active' : ''}`}
@@ -120,7 +122,7 @@ export default function ChatWidget() {
           {messages.length === 0 ? (
             <p className="sanad-muted">No messages yet. Say hello!</p>
           ) : (
-            messages.map((m) => (
+            messages.filter(Boolean).map((m) => (
               <div
                 key={m.id}
                 className={`sanad-chat-bubble ${m.author_id === user.id ? 'own' : ''}`}

@@ -4,6 +4,7 @@ import { useApiData } from '../../hooks/useApiData';
 import { useFormValidation, validators } from '../../hooks/useFormValidation';
 import medicalService from '../../services/medicalService';
 import patientService from '../../services/patientService';
+import pharmacyService from '../../services/pharmacyService';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorState from '../../components/ErrorState';
 import EmptyState from '../../components/EmptyState';
@@ -16,18 +17,20 @@ export default function DoctorPrescriptions() {
   const [submitting, setSubmitting] = useState(false);
 
   const fetchData = useCallback(async () => {
-    const [prescriptions, patients] = await Promise.all([
+    const [prescriptions, patients, pharmacies] = await Promise.all([
       medicalService.listPrescriptions(),
       patientService.list(),
+      pharmacyService.listPharmacies(),
     ]);
-    return { prescriptions, patients };
+    return { prescriptions, patients, pharmacies };
   }, []);
   const { data, loading, error, refetch } = useApiData(fetchData, []);
 
   const { values, errors, setField, validate, reset } = useFormValidation(
-    { patient_id: preselectedPatientId || '', medication: '', dosage: '', frequency: '', duration: '', instructions: '' },
+    { patient_id: preselectedPatientId || '', pharmacy_id: '', medication: '', dosage: '', frequency: '', duration: '', instructions: '' },
     {
       patient_id: validators.required('Patient'),
+      pharmacy_id: validators.required('Pharmacy'),
       medication: validators.required('Medication'),
       dosage: validators.required('Dosage'),
       frequency: validators.required('Frequency'),
@@ -43,6 +46,7 @@ export default function DoctorPrescriptions() {
     try {
       await medicalService.createPrescription({
         patient_id: parseInt(values.patient_id, 10),
+        pharmacy_id: parseInt(values.pharmacy_id, 10),
         medication: values.medication,
         dosage: values.dosage,
         frequency: values.frequency,
@@ -81,6 +85,13 @@ export default function DoctorPrescriptions() {
             {data.patients.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
           {errors.patient_id && <span className="sanad-field-error">{errors.patient_id}</span>}
+
+          <label>Pharmacy</label>
+          <select value={values.pharmacy_id} onChange={(e) => setField('pharmacy_id', e.target.value)}>
+            <option value="">Select a pharmacy...</option>
+            {data.pharmacies.map((ph) => <option key={ph.id} value={ph.id}>{ph.name}</option>)}
+          </select>
+          {errors.pharmacy_id && <span className="sanad-field-error">{errors.pharmacy_id}</span>}
 
           <div className="sanad-form-row">
             <div>

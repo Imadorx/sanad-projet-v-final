@@ -1,10 +1,23 @@
 # -*- coding: utf-8 -*-
+import html
 import json
+import re
 from odoo import http
 from odoo.exceptions import AccessError, ValidationError
 from odoo.http import request
 
 from odoo.addons.sanad_core.controllers.auth_controller import json_response, error_response
+
+
+def strip_html(text):
+    """Remove HTML tags and decode entities, returning plain text.
+    Unescape first so Odoo-encoded entities become real tags,
+    then strip all tags in one pass."""
+    if not text:
+        return text or ''
+    clean = html.unescape(str(text))
+    clean = re.sub(r'<[^>]+>', '', clean)
+    return clean.strip()
 
 
 def serialize_conversation(c):
@@ -24,7 +37,7 @@ def serialize_message(m):
         'id': m.id,
         'author_id': m.author_id.id if m.author_id else None,
         'author_name': m.author_id.name if m.author_id else 'System',
-        'body': m.body,
+        'body': strip_html(m.body),
         'date': m.date.isoformat() if m.date else None,
     }
 
@@ -52,7 +65,7 @@ class SanadChatController(http.Controller):
             'conversations': [serialize_conversation(c) for c in conversations]
         })
 
-    @http.route('/api/chat/conversations', type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+    @http.route('/api/chat/conversations', type='http', auth='user', methods=['POST'], csrf=False)
     def create_or_get_conversation(self, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         other_user_id = params.get('other_user_id')
@@ -86,7 +99,7 @@ class SanadChatController(http.Controller):
         return json_response({'messages': [serialize_message(m) for m in messages]})
 
     @http.route('/api/chat/conversations/<int:conversation_id>/messages',
-                type='jsonrpc', auth='user', methods=['POST'], csrf=False)
+                type='http', auth='user', methods=['POST'], csrf=False)
     def post_message(self, conversation_id, **kwargs):
         params = json.loads(request.httprequest.data or b'{}')
         body = (params.get('body') or '').strip()
