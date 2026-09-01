@@ -20,9 +20,11 @@ const NAV_ITEMS = [
 
   { to: '/laboratory', label: 'Dashboard', roles: ['laboratory'] },
   { to: '/laboratory/requests', label: 'Requests', roles: ['laboratory'] },
+  { to: '/laboratory/chat', label: 'Chat', roles: ['laboratory'] },
 
   { to: '/pharmacy', label: 'Dashboard', roles: ['pharmacy'] },
   { to: '/pharmacy/queue', label: 'Prescription Queue', roles: ['pharmacy'] },
+  { to: '/pharmacy/chat', label: 'Chat', roles: ['pharmacy'] },
 
   { to: '/admin', label: 'Dashboard', roles: ['admin'] },
   { to: '/admin/users', label: 'Users & Roles', roles: ['admin'] },

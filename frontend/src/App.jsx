@@ -23,9 +23,11 @@ import DoctorChat from './pages/doctor/Chat';
 
 import LabDashboard from './pages/laboratory/LabDashboard';
 import LabRequests from './pages/laboratory/Requests';
+import LabChat from './pages/laboratory/Chat';
 
 import PharmacyDashboard from './pages/pharmacy/PharmacyDashboard';
 import PharmacyQueue from './pages/pharmacy/Queue';
+import PharmacyChat from './pages/pharmacy/Chat';
 
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/Users';
@@ -74,10 +76,12 @@ export default function App() {
           {/* Laboratory */}
           <Route path="/laboratory" element={<ProtectedRoute allowedRoles={['laboratory']}>{withLayout(<LabDashboard />)}</ProtectedRoute>} />
           <Route path="/laboratory/requests" element={<ProtectedRoute allowedRoles={['laboratory']}>{withLayout(<LabRequests />)}</ProtectedRoute>} />
+          <Route path="/laboratory/chat" element={<ProtectedRoute allowedRoles={['laboratory']}>{withLayout(<LabChat />)}</ProtectedRoute>} />
 
           {/* Pharmacy */}
           <Route path="/pharmacy" element={<ProtectedRoute allowedRoles={['pharmacy']}>{withLayout(<PharmacyDashboard />)}</ProtectedRoute>} />
           <Route path="/pharmacy/queue" element={<ProtectedRoute allowedRoles={['pharmacy']}>{withLayout(<PharmacyQueue />)}</ProtectedRoute>} />
+          <Route path="/pharmacy/chat" element={<ProtectedRoute allowedRoles={['pharmacy']}>{withLayout(<PharmacyChat />)}</ProtectedRoute>} />
 
           {/* Admin */}
           <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}>{withLayout(<AdminDashboard />)}</ProtectedRoute>} />

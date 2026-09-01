@@ -16,11 +16,12 @@ export default function DoctorLabRequests() {
   const [submitting, setSubmitting] = useState(false);
 
   const fetchData = useCallback(async () => {
-    const [requests, patients] = await Promise.all([
+    const [requests, patients, laboratories] = await Promise.all([
       laboratoryService.listRequests(),
       patientService.list(),
+      laboratoryService.listLaboratories(),
     ]);
-    return { requests, patients };
+    return { requests, patients, laboratories };
   }, []);
   const { data, loading, error, refetch } = useApiData(fetchData, []);
 
@@ -28,6 +29,7 @@ export default function DoctorLabRequests() {
     { patient_id: preselectedPatientId || '', laboratory_id: '', analysis_type: '', instructions: '' },
     {
       patient_id: validators.required('Patient'),
+      laboratory_id: validators.required('Laboratory'),
       analysis_type: validators.required('Analysis type'),
     }
   );
@@ -36,10 +38,6 @@ export default function DoctorLabRequests() {
     e.preventDefault();
     setSubmitError(null);
     if (!validate()) return;
-    if (!values.laboratory_id) {
-      setSubmitError('Please select a laboratory (configured by an administrator).');
-      return;
-    }
     setSubmitting(true);
     try {
       const created = await laboratoryService.createRequest({
@@ -81,10 +79,12 @@ export default function DoctorLabRequests() {
           </select>
           {errors.patient_id && <span className="sanad-field-error">{errors.patient_id}</span>}
 
-          <label>Laboratory ID</label>
-          <input type="number" placeholder="Laboratory record ID"
-                 value={values.laboratory_id} onChange={(e) => setField('laboratory_id', e.target.value)} />
-          <span className="sanad-hint">Ask your administrator for the laboratory ID, or select from the Odoo backend directory.</span>
+          <label>Laboratory</label>
+          <select value={values.laboratory_id} onChange={(e) => setField('laboratory_id', e.target.value)}>
+            <option value="">Select a laboratory...</option>
+            {data.laboratories.map((lab) => <option key={lab.id} value={lab.id}>{lab.name}</option>)}
+          </select>
+          {errors.laboratory_id && <span className="sanad-field-error">{errors.laboratory_id}</span>}
 
           <label>Analysis Type</label>
           <input type="text" placeholder="e.g. Complete Blood Count"

@@ -48,11 +48,29 @@ def serialize_lab_result(res):
     }
 
 
+def serialize_laboratory_org(org):
+    return {
+        'id': org.id,
+        'name': org.name,
+        'address': org.address,
+        'phone': org.phone,
+        'email': org.email,
+    }
+
+
 class SanadLaboratoryController(http.Controller):
     """REST endpoints for laboratory requests, results, and KPI evolution.
     All business logic (status transitions, validation) stays on the
     sanad.lab.request/sanad.lab.result models - these routes only
     translate HTTP <-> ORM calls and never re-implement workflow rules."""
+
+    @http.route('/api/laboratories', type='http', auth='user', methods=['GET'], csrf=False)
+    def list_laboratories(self, **kwargs):
+        orgs = request.env['sanad.laboratory.org'].search(
+            [('active', '=', True)], order='name')
+        return json_response({
+            'laboratories': [serialize_laboratory_org(o) for o in orgs]
+        })
 
     # ---- Requests ----
     @http.route('/api/lab-requests', type='http', auth='user', methods=['GET'], csrf=False)

@@ -1,6 +1,10 @@
 import apiClient from './apiClient';
 
 const laboratoryService = {
+  async listLaboratories() {
+    const res = await apiClient.get('/api/laboratories');
+    return res.data.laboratories;
+  },
   async listRequests(params = {}) {
     const res = await apiClient.get('/api/lab-requests', { params });
     return res.data.lab_requests;
