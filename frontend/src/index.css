@@ -77,6 +77,8 @@ textarea { min-height: 80px; resize: vertical; }
 .sanad-btn-primary:hover { background: var(--sanad-primary-dark); }
 .sanad-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 .sanad-btn-secondary { background: var(--sanad-secondary); color: var(--sanad-text); }
+.sanad-btn-danger { background: var(--sanad-danger); color: #fff; }
+.sanad-btn-danger:hover { opacity: 0.85; }
 .sanad-btn-small { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
 
 /* ---- Cards / stats ---- */

@@ -87,7 +87,13 @@ export default function PatientAiAssistant() {
     }
   };
 
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel();
+    setSpeaking(false);
+  };
+
   const handleSpeak = async () => {
+    if (speaking) { stopSpeaking(); return; }
     const textToSpeak = translation?.translation || explanation?.explanation;
     if (!textToSpeak) return;
     const { text } = await aiService.tts(textToSpeak);
@@ -95,10 +101,12 @@ export default function PatientAiAssistant() {
       alert('Text-to-speech is not supported in this browser.');
       return;
     }
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = targetLang === 'ar' ? 'ar-SA' : targetLang === 'fr' ? 'fr-FR' : 'en-US';
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => setSpeaking(false);
     window.speechSynthesis.speak(utterance);
   };
 
@@ -173,8 +181,8 @@ export default function PatientAiAssistant() {
               <button className="sanad-btn sanad-btn-secondary" onClick={handleTranslate} disabled={translateBusy}>
                 {translateBusy ? 'Translating...' : 'Translate'}
               </button>
-              <button className="sanad-btn sanad-btn-secondary" onClick={handleSpeak} disabled={speaking}>
-                {speaking ? 'Speaking...' : '🔊 Read Aloud'}
+              <button className={`sanad-btn ${speaking ? 'sanad-btn-danger' : 'sanad-btn-secondary'}`} onClick={handleSpeak}>
+                {speaking ? '⏹ Stop' : '🔊 Read Aloud'}
               </button>
             </div>
 
